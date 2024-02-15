@@ -135,6 +135,7 @@ Associação de **Products** e **Brand**
 
 [
     {
+    
         "idUser": 2,
         "name": "Acerola e Paçoca",
         "dateTime": "2024-05-08T12:05:05",
@@ -153,6 +154,7 @@ OBS: Só é permitido fazer a pesquisa do **CARRINHO** passando o **ID do carrin
 Motivo: Evitar travamento de máquina na hora de fazer a consulta.
 
 {
+    
     "idCart": 2,
     "userInfo": {
         "idUser": 2,
@@ -179,6 +181,7 @@ Motivo: Evitar travamento de máquina na hora de fazer a consulta.
 **GET PRODUCT**
 [
     {
+       
         "idProduct": 2,
         "name": "Teste....",
         "description": "Teste 123",
@@ -191,6 +194,7 @@ Motivo: Evitar travamento de máquina na hora de fazer a consulta.
 **GET BRAND**
 
 {
+        
         "idBrand": 2,
         "label": "Teste....",
         "produtosL": [
