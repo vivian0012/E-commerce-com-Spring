@@ -19,115 +19,188 @@
 **Criando um usuário**
 **URL:**
 
-/api/user (POST)
+- /api/user (POST)
 
 **JSON:**
-{
+
 
     "name": "Acerola e Paçoca",
-    
     "dateTime":"2024-05-08T12:05:05"   
     
-}
+
 
 **Criando um ShoppingCart**
 
 **URL:**
 
-/api/shoppingCart/UserID/{idUser} (POST)
+- /api/shoppingCart/UserID/{idUser} (POST)
 
 **Obs:** Associação de um **carrinho** e um **usuário** são feitos via **URL**, por esse motivo, não será necessário a criação via **JSON**
 
 **Criando um produto**
 **URL:**
 
-/api/product (POST)
+- /api/product (POST)
 
 **JSON:**
-{
+
 
     "name": "Teste....", 
-    
     "description": "Teste 123",
-    
     "quantity": 1,
-    
     "value": 60.60,
-    
     "link": "www.seila.com.br" 
     
-}
+
 
 **Criando uma marca**
 **URL:**
 
-/api/brand (POST)
+- /api/brand (POST)
 
 **JSON:**
-{
+
 
     "label": "Teste...."
     
-}
+
 
 ## ASSOCIAÇÃO
 
 Associação com **UserOrderSimple** e **ShoppingCart**
 **URL:**
 
-/api/shoppingCart/UserID/{idUser} (PUT)
+- /api/shoppingCart/UserID/{idUser} (PUT)
 
 Associação com **ShoppingCart** e **Products**
 **URL:**
 
-/api/shoppingCart/addProductCart (PUT)
+- /api/shoppingCart/addProductCart (PUT)
 
 **JSON:**
-{
+
 
     "idCart": 1,
     
     "idProduct": 1
     
-}
+
 
 Associação de **Products** e **Brand**
 
 **URL:**
 
-/api/product/{idProduct}/brand/{idBrand} (PUT)
+- /api/product/{idProduct}/brand/{idBrand} (PUT)
 
 ## UPDATE
 
 **UserOrderSimple**
+
 **URL:**
-/api/user/updateUser/{idUser} (PUT)
+
+- /api/user/updateUser/{idUser} (PUT)
 
 **Products**
 
 **URL:**
 
-/api/product/update/{idProduct} (PUT)
+- /api/product/update/{idProduct} (PUT)
 
 **Brand**
 **URL:**
 
-/api/brand/{idBrand} (PUT)
+- /api/brand/{idBrand} (PUT)
 
 ## DELETE
 
 **UserOrderSimple**
 
-/api/user/deleteUser/{idUser} (DEL)
+- /api/user/deleteUser/{idUser} (DEL)
 
 **OBS:** Quando você exclue o **usuário**, o **carrinho de compra e todos os seus produtos** são automaticamente excluídos. Ou seja, para cada **UM** usuário, só deverá ter **OBRIGATORIAMENTE** um carrinho associado a ele.
 
 **ShoppingCart**
 **URL:**
 
-/api/shoppingCart/delete/cartId/{idCart}/product/{idProduct} (DEL)
+- /api/shoppingCart/delete/cartId/{idCart}/product/{idProduct} (DEL)
 
 **Products**
 **URL:**
 
-/api/product/deleteProduct/{idProduct} (DEL)
+- /api/product/deleteProduct/{idProduct} (DEL)
+
+## RESULTADO
+
+**GET USER**
+
+[
+    {
+        "idUser": 2,
+        "name": "Acerola e Paçoca",
+        "dateTime": "2024-05-08T12:05:05",
+        "quantity": 1,
+        "valueOrder": 60.6,
+        "idCart": 2
+    }
+]
+
+**GET SHOPPINGCAR**
+
+URL: api/shoppingCart/2
+
+OBS: Só é permitido fazer a pesquisa do **CARRINHO** passando o **ID do carrinho**. 
+
+Motivo: Evitar travamento de máquina na hora de fazer a consulta.
+
+{
+    "idCart": 2,
+    "userInfo": {
+        "idUser": 2,
+        "name": "Acerola e Paçoca",
+        "dateTime": "2024-05-08T12:05:05",
+        "quantity": 1,
+        "valueOrder": 60.6,
+        "idCart": 2
+    },
+    "totalValue": 60.6,
+    "quantity": 1,
+    "productList": [
+        {
+            "idProduct": 2,
+            "name": "Teste....",
+            "description": "Teste 123",
+            "quantity": 1,
+            "value": 60.6,
+            "link": "www.seila.com.br"
+        }
+    ]
+}
+
+**GET PRODUCT**
+[
+    {
+        "idProduct": 2,
+        "name": "Teste....",
+        "description": "Teste 123",
+        "quantity": 1,
+        "value": 60.6,
+        "link": "www.seila.com.br"
+    }
+]
+
+**GET BRAND**
+
+{
+        "idBrand": 2,
+        "label": "Teste....",
+        "produtosL": [
+            {
+                "idProduct": 2,
+                "name": "Teste....",
+                "description": "Teste 123",
+                "quantity": 1,
+                "value": 60.6,
+                "link": "www.seila.com.br"
+            }
+        ]
+    }
