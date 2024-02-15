@@ -18,7 +18,9 @@
 
 **Criando um usuário**
 **URL:**
+
 WWW.algumacoisa.com.br/api/user (POST)
+
 **JSON:**
 {
     "name": "Acerola e Paçoca",
@@ -26,13 +28,18 @@ WWW.algumacoisa.com.br/api/user (POST)
 }
 
 **Criando um ShoppingCart**
+
 **URL:**
+
 WWW.algumacoisa.com.br/api/shoppingCart/UserID/{idUser} (POST)
+
 **Obs:** Associação de um **carrinho** e um **usuário** são feitos via **URL**, por esse motivo, não será necessário a criação via **JSON**
 
 **Criando um produto**
 **URL:**
+
 WWW.algumacoisa.com.br/api/product (POST)
+
 **JSON:**
 {
     "name": "Teste....", 
@@ -44,7 +51,9 @@ WWW.algumacoisa.com.br/api/product (POST)
 
 **Criando uma marca**
 **URL:**
+
 WWW.algumacoisa.com.br/api/brand (POST)
+
 **JSON:**
 {
     "label": "Teste...."
@@ -54,11 +63,14 @@ WWW.algumacoisa.com.br/api/brand (POST)
 
 Associação com **UserOrderSimple** e **ShoppingCart**
 **URL:**
+
 WWW.algumacoisa.com.br/api/shoppingCart/UserID/{idUser} (PUT)
 
 Associação com **ShoppingCart** e **Products**
 **URL:**
+
 WWW.algumacoisa.com.br/api/shoppingCart/addProductCart (PUT)
+
 **JSON:**
 {
     "idCart": 1,
@@ -66,7 +78,9 @@ WWW.algumacoisa.com.br/api/shoppingCart/addProductCart (PUT)
 }
 
 Associação de **Products** e **Brand**
+
 **URL:**
+
 WWW.algumacoisa.com.br/api/product/{idProduct}/brand/{idBrand} (PUT)
 
 ## UPDATE
@@ -81,18 +95,23 @@ WWW.algumacoisa.com.br/api/product/update/{idProduct}
 
 **Brand**
 **URL:**
+
 WWW.algumacoisa.com.br/api/brand/{idBrand}
 
 ## DELETE
 
 **UserOrderSimple**
+
 WWW.algumacoisa.com.br/api/user/deleteUser/{idUser}
+
 **OBS:** Quando você exclue o **usuário**, o **carrinho de compra e todos os seus produtos** são automaticamente excluídos. Ou seja, para cada **UM** usuário, só deverá ter **OBRIGATORIAMENTE** um carrinho associado a ele.
 
 **ShoppingCart**
 **URL:**
+
 WWW.algumacoisa.com.br/api/shoppingCart/delete/cartId/{idCart}/product/{idProduct}
 
 **Products**
 **URL:**
+
 WWW.algumacoisa.com.br/api/product/deleteProduct/{idProduct}
