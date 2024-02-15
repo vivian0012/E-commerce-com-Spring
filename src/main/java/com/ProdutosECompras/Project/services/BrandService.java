@@ -14,19 +14,19 @@ import com.ProdutosECompras.Project.repositories.BrandRepository;
 @Service
 public class BrandService {
 
-	// Me dará todos os comandos de persistencia de dados.
+	// Me dará todos os comandos de persistência de dados.
 	
 	@Autowired
-	private BrandRepository Bservice;
+	private BrandRepository brandRepository;
 
 	// Retorna todos.
 	public List<Brand> findAll() {
-		return Bservice.findAll();
+		return brandRepository.findAll();
 	}
 	
 	// Retornando por ID
 	public Optional<Brand> findById(Long idBrand) {
-		Optional<Brand> obj = Bservice.findById(idBrand);
+		Optional<Brand> obj = brandRepository.findById(idBrand);
 		if(obj.isPresent()) {
 			return obj;	
 		} else {
@@ -36,14 +36,14 @@ public class BrandService {
 	
 	// Inserção de marca
 	public Brand CreatObj(Brand obj) {
-		return Bservice.save(obj);
+		return brandRepository.save(obj);
 	}
 	
 	// Atualização de dados
 	public Brand updateDataBase(Long idBrand, Brand objOld) {
-		Brand objNew = Bservice.getReferenceById(idBrand); // Pegará o ID e permanecerá em observação
+		Brand objNew = brandRepository.getReferenceById(idBrand); // Pegará o ID e permanecerá em observação
 		updateData(objNew, objOld); // Troca um pelo outro.
-		return Bservice.save(objNew);
+		return brandRepository.save(objNew);
 	}
 
 	private void updateData(Brand objNew, Brand objOld) {

@@ -1,7 +1,5 @@
 package com.ProdutosECompras.Project.controller;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,30 +10,27 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.ProdutosECompras.Project.profiel.AddProductToCart;
 import com.ProdutosECompras.Project.profiel.ShoppingCart;
 import com.ProdutosECompras.Project.services.ShoppingCartService;
 
-// Configurar para que entre apenas com o ID e não puxe o histórico de todos os clientes.
-
 @RestController
-@RequestMapping(value = "/shoppingCart")
+@RequestMapping(value = "/api/shoppingCart")
 public class ShoppingCartHTTP {
 	@Autowired
-	private ShoppingCartService Sservice;
+	private ShoppingCartService shoppingCartService;
 
 	// Returnando apenas todo mundo.
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<ShoppingCart>> findById(@PathVariable Long id) {
-		Optional<ShoppingCart> obj = Sservice.findById(id);
+	public ResponseEntity<ShoppingCart> findById(@PathVariable Long id) {
+		ShoppingCart obj = shoppingCartService.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 
 	// Cria um carrinho (Sem produtos) e obrigando o navegador a associar com o usuário que deseja através do ID.
 	@PostMapping("/UserID/{idUser}")
-	public ResponseEntity<ShoppingCart> CreatNewObj(@PathVariable Long idUser) {
-		ShoppingCart obj = Sservice.CreatObj(idUser);
+	public ResponseEntity<ShoppingCart> creatNewObj(@PathVariable Long idUser) {
+		ShoppingCart obj = shoppingCartService.CreatObj(idUser);
 		return ResponseEntity.ok().body(obj);
 	}
 
@@ -43,7 +38,7 @@ public class ShoppingCartHTTP {
 	@PutMapping(value = "/addProductCart")
 	public ResponseEntity<ShoppingCart> AddProductsShopping(@RequestBody AddProductToCart GetObj) {
 
-		ShoppingCart request = Sservice.AddNewProductTESTE(GetObj);
+		ShoppingCart request = shoppingCartService.AddNewProductTESTE(GetObj);
 		return ResponseEntity.ok().body(request);
 	}
 
@@ -51,11 +46,12 @@ public class ShoppingCartHTTP {
 	@PutMapping(value = "/{idCart}/product/{idProduct}")
 	public ShoppingCart AssociationById(@PathVariable Long idCart, @PathVariable Long idProduct) {
 
-		return Sservice.AssociationData(idCart, idProduct);
+		return shoppingCartService.AssociationData(idCart, idProduct);
 	}
 
+	// Deleção de carrinho
 	@DeleteMapping("/delete/cartId/{idCart}/product/{idProduct}")
 	public void DeleteProductsInCart(@PathVariable Long idCart, @PathVariable Long idProduct) {
-		Sservice.DeleteByIdProduct(idCart, idProduct);
+		shoppingCartService.DeleteByIdProduct(idCart, idProduct);
 	}
 }

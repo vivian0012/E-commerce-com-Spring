@@ -16,30 +16,30 @@ import com.ProdutosECompras.Project.profiel.Brand;
 import com.ProdutosECompras.Project.services.BrandService;
 
 @RestController
-@RequestMapping(value = "/brands")
+@RequestMapping(value = "/api/brands")
 public class BrandHTTP {
-	
+
 	@Autowired
-	private BrandService Bservice;
-	
+	private BrandService brandService;
+
 	// Retornando todas as marcas
 	@GetMapping
 	public ResponseEntity<List<Brand>> findAll(){ // ReponseEntity representa o chamado HTTPS
-		List<Brand> obj = Bservice.findAll();
+		List<Brand> obj = brandService.findAll();
 		return ResponseEntity.ok().body(obj);
 	}
-	
+
 	//Adiciona uma nova marca
 	@PostMapping
 	public ResponseEntity<Brand> CreatNewObj(@RequestBody Brand obj) {
-		obj = Bservice.CreatObj(obj);
+		obj = brandService.CreatObj(obj);
 		return ResponseEntity.ok().body(obj);
 	}
-	
+
 	// Alterando a marca de acordo com o ID
 	@PutMapping(value = "/{idBrand}")
 	public ResponseEntity<Brand> UpdateObj(@PathVariable Long idBrand, @RequestBody Brand objNew) {
-		objNew = Bservice.updateDataBase(idBrand, objNew);
+		objNew = brandService.updateDataBase(idBrand, objNew);
 		return ResponseEntity.ok().body(objNew);
 	}
 }

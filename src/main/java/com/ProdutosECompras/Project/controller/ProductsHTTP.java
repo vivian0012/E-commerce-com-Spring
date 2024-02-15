@@ -1,6 +1,7 @@
 package com.ProdutosECompras.Project.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,23 +18,30 @@ import com.ProdutosECompras.Project.profiel.Products;
 import com.ProdutosECompras.Project.services.ProductService;
 
 @RestController
-@RequestMapping(value = "/product")
+@RequestMapping(value = "/api/product")
 public class ProductsHTTP {
 	
 	@Autowired
-	private ProductService Pservice;
+	private ProductService productService;
 	
 	// Retornando TODOS
 	@GetMapping
 	public ResponseEntity<List<Products>> findAll(){ // ReponseEntity representa o chamado HTTPS
-		List<Products> obj = Pservice.findAll();
+		List<Products> obj = productService.findAll();
 		return ResponseEntity.ok().body(obj);
+	}
+
+	// Retornando por ID
+	@GetMapping("/{idProduct}")
+	public ResponseEntity<Products> FindById(@PathVariable Long idProduct) {
+		Products obj = productService.findById(idProduct);
+		return	ResponseEntity.ok().body(obj);
 	}
 	
 	// Adicionando valor
 	@PostMapping
 	public ResponseEntity<Products> CreatNewObj(@RequestBody Products obj) {
-		obj = Pservice.CreatObj(obj);
+		obj = productService.CreatObj(obj);
 		return ResponseEntity.ok().body(obj);
 	}
 	
@@ -41,7 +49,7 @@ public class ProductsHTTP {
 	@PutMapping(value = "/{idProduct}")
 	public ResponseEntity<Products> UpdateObj(@PathVariable Long idProduct, @RequestBody Products objNew)
 	{
-		objNew = Pservice.UpdateObjProduct(idProduct, objNew);
+		objNew = productService.UpdateObjProduct(idProduct, objNew);
 		return ResponseEntity.ok().body(objNew);
 	}
 	
@@ -52,12 +60,12 @@ public class ProductsHTTP {
 			@PathVariable Long idProduct, 
 			@PathVariable Long idBrand) {
 		
-		return Pservice.AssociationData(idProduct, idBrand);
+		return productService.AssociationData(idProduct, idBrand);
 	}
 	
 	// Delete produtos (FUNCIONANDO)
 	@DeleteMapping("/deleteProduct/{idProduct}")
 	public void deleteProduct(@PathVariable Long idProduct) {
-		Pservice.DeleteProduct(idProduct);
+		productService.DeleteProduct(idProduct);
 	}
 }

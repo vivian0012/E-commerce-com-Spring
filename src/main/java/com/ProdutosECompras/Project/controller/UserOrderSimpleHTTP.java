@@ -17,33 +17,33 @@ import com.ProdutosECompras.Project.profiel.UserOrderSimple;
 import com.ProdutosECompras.Project.services.UserOrderSimpleService;
 
 @RestController
-@RequestMapping(value = "/user")
+@RequestMapping(value = "/api/user")
 public class UserOrderSimpleHTTP {
 	@Autowired
-	private UserOrderSimpleService Uservice;
+	private UserOrderSimpleService userOrderSimpleService;
 	
 	// Retornando TODOS
 	@GetMapping
 	public ResponseEntity<List<UserOrderSimple>> findAll(){ // ReponseEntity representa o chamado HTTPS
-		List<UserOrderSimple> obj = Uservice.findAll();
+		List<UserOrderSimple> obj = userOrderSimpleService.findAll();
 		return ResponseEntity.ok().body(obj);
 	}
 	// Adicionando um novo usuário
 	@PostMapping
 	public ResponseEntity<UserOrderSimple> CreatNewObj(@RequestBody UserOrderSimple obj) {
-		obj = Uservice.CreatObj(obj);
+		obj = userOrderSimpleService.CreatObj(obj);
 		return ResponseEntity.ok().body(obj);
 	}
 	// Atualizando usuário
 	@PutMapping("/updateUser/{idUser}")
 	public ResponseEntity<UserOrderSimple> UpdateObjUser(@PathVariable Long idUser, @RequestBody UserOrderSimple oldObjUser) {
-		UserOrderSimple obj = Uservice.UpdateNewUser(idUser, oldObjUser);
+		UserOrderSimple obj = userOrderSimpleService.UpdateNewUser(idUser, oldObjUser);
 		return ResponseEntity.ok().body(obj);
 	}
 	// Deletando usuário
 	@DeleteMapping("/deleteUser/{idUser}")
 	public ResponseEntity<UserOrderSimple> deleteById(@PathVariable Long idUser) {
-		Uservice.deleteByIdUser(idUser);
+		userOrderSimpleService.deleteByIdUser(idUser);
 		return ResponseEntity.noContent().build();
 	}
 }

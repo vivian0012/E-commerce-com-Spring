@@ -1,8 +1,10 @@
 package com.ProdutosECompras.Project.services;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import com.ProdutosECompras.Project.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,110 +22,104 @@ import jakarta.transaction.Transactional;
 public class ShoppingCartService {
 
 	@Autowired
-	private ShoppingCartRepository Sservice;
+	private ShoppingCartRepository shoppingCartRepository;
 
 	@Autowired
-	private UserOrderSimpleService Uservice;
+	private UserOrderSimpleService userOrderSimpleRepository;
 
 	@Autowired
-	private ProductRepository Pservice;
+	private ProductRepository productRepository;
 
 	@Autowired
 	private EntityManager entityManager;
 
-	// Retorna todos.
+	// RETORNANDO TODOS (Não precisa)
 	public List<ShoppingCart> findAll() {
-		return Sservice.findAll();
+		return shoppingCartRepository.findAll();
 	}
 
-	// Retornando por ID
-	public Optional<ShoppingCart> findById(Long id) {
-		Optional<ShoppingCart> obj = Sservice.findById(id);
-		if (obj.isPresent()) {
+	// RETORNANDO UM VALOR POR ID (Exceção tratada)
+	public ShoppingCart findById(Long id) {
+		try {
+			ShoppingCart obj = shoppingCartRepository.findById(id).get();
 			return obj;
-		} else {
-			throw new RuntimeException("Id não encontrado");
+		} catch (NoSuchElementException e) {
+			throw new ResourceNotFoundException(id);
 		}
 	}
 
-	// Inserção de um novo produto
+	// ADICIONANDO UM NOVO VALOR (Exceção tratada)
 	public ShoppingCart CreatObj(Long idUser) {
-
-		ShoppingCart spCart = new ShoppingCart();
-
-		// Encontrando o ID do usuário
-		UserOrderSimple findUserObj = Uservice.findById(idUser).get();
-
-		// Associando o Usuário ao carrinho
-		spCart.setUserInfo(findUserObj);
-
-		return Sservice.save(spCart);
+			ShoppingCart spCart = new ShoppingCart();
+			UserOrderSimple findUserObj = userOrderSimpleRepository.findById(idUser); // Chama a função e localiza o ID
+			spCart.setUserInfo(findUserObj);
+			return shoppingCartRepository.save(spCart);
 	}
 
-	// Atualização por JSON
+	// COLOCANDO O PRODUTO DENTRO DO CARRINHO DE COMPRA USANDO O CORPO DO JSON (Exceção tratada)
 	@Transactional
 	public ShoppingCart AddNewProductTESTE(AddProductToCart request) {
-		// Pego o ID que vem da requisição
-		Long idCart = request.getIdCart();
-		Long idProduct = request.getIdProduct();
-
 		// Colocando os IDs dentro do findById para encontrar os valores correspondente
-		ShoppingCart Cart = Sservice.findById(idCart).get(); // Instanciado
-		Products products = Pservice.findById(idProduct).get();
+		try {
+			// Pego o ID que vem da requisição
+			Long idCart = request.getIdCart();
+			Long idProduct = request.getIdProduct();
+			ShoppingCart Cart = shoppingCartRepository.findById(idCart).get();
+			Products products = productRepository.findById(idProduct).get();
+			List<Products> productList = Cart.getProducts();
+			products.setShoppingcart(Cart);
+			productList.add(products);
+			Cart.setProducts(productList);
+			entityManager.flush();
+			return shoppingCartRepository.save(Cart);
 
-		List<Products> productList = Cart.getProducts();
-
-		products.setShoppingcart(Cart);
-		productList.add(products);
-
-		Cart.setProducts(productList);
-		entityManager.flush();
-
-		return Sservice.save(Cart);
-
+		} catch (NoSuchElementException e) {
+			throw new ResourceNotFoundException(request);
+		}
 	}
 
-	// Atualização por URL
-	public ShoppingCart AssociationData(Long idCart, Long idProduct) {
-
-		ShoppingCart Cart = Sservice.findById(idCart).get(); // Instanciado
-		Products products = Pservice.findById(idProduct).get();
-
-		List<Products> productList = Cart.getProducts();
-
-		products.setShoppingcart(Cart);
-		productList.add(products);
-		Cart.setProducts(productList);
-
-		return Sservice.save(Cart);
-
-	}
-
-	// Deleção de Produtos
+	// DELEÇÃO DE PRODUTOS DENTRO DO CARRINHO (Exceção tratada)
 	public void DeleteByIdProduct(Long idCart, Long idProduct) {
-		Optional<ShoppingCart> cartOptional = Sservice.findById(idCart);
+		Optional<ShoppingCart> cartOptional = shoppingCartRepository.findById(idCart);
 
+		// CASO TUDO DER CERTO
 		if (cartOptional.isPresent()) {
 			ShoppingCart cart = cartOptional.get(); // Pegando o Id do carrinho
-
-			Boolean isProductInCart = false;
-			
+			boolean isProductInCart = false;
 			for (Products product : cart.getProducts()) {
 				if (product.getIdProduct().equals(idProduct)) {
 					isProductInCart = true;
 					break;
-				} else {
-					throw new RuntimeException("Erro ao encontraro o produto");
 				}
 			}
-			if(isProductInCart == true) {
-				Pservice.deleteById(idProduct);
+			// CASO O ID DO PRODUTO ESTEJA ERRADO.
+			if(isProductInCart) {
+				productRepository.deleteById(idProduct);
 			} else {
-				throw new RuntimeException("Produto não encontrado no carrinho");
+				throw new ResourceNotFoundException(idProduct);
 			}
-			
+
 		} else {
-			throw new RuntimeException("Carrinho não encontrado");
+			// CASO O ID DO CARRINHO ESTEJA ERRADO.
+			throw new ResourceNotFoundException(idCart);
 		}
 	}
+
+	// Atualização por URL (Não precisa)
+	public ShoppingCart AssociationData(Long idCart, Long idProduct) {
+
+		ShoppingCart Cart = shoppingCartRepository.findById(idCart).get(); // Instanciado
+		Products products = productRepository.findById(idProduct).get();
+
+		List<Products> productList = Cart.getProducts();
+
+		products.setShoppingcart(Cart);
+		productList.add(products);
+		Cart.setProducts(productList);
+
+		return shoppingCartRepository.save(Cart);
+
+	}
+
+
 }

@@ -1,8 +1,11 @@
 package com.ProdutosECompras.Project.services;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import com.ProdutosECompras.Project.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,53 +17,50 @@ import com.ProdutosECompras.Project.repositories.UserOrderSimpleRepository;
 public class UserOrderSimpleService {
 
 	@Autowired
-	private UserOrderSimpleRepository Uservice;
-	
-	@Autowired
-	private ShoppingCartRepository Sservice;
-	
-	@Autowired
+	private UserOrderSimpleRepository userOrderSimpleRepository;
 
-	// Retorna todos.
+	// Retorna todos (Não precisa)
 	public List<UserOrderSimple> findAll() {
-		return Uservice.findAll();
+		return userOrderSimpleRepository.findAll();
 	}
 
-	// Retornando por ID
-	public Optional<UserOrderSimple> findById(Long id) {
-		Optional<UserOrderSimple> obj = Uservice.findById(id);
-		if (obj.isPresent()) {
+	// Retornando por ID. SENDO USADO PELO ShoppingCartSERVICE (Exceção tratada)
+	public UserOrderSimple findById(Long id) {
+		try{
+			UserOrderSimple obj = userOrderSimpleRepository.findById(id).get();
 			return obj;
-		} else {
-			throw new RuntimeException("Id não encontrado");
+		} catch (NoSuchElementException e) {
+			throw new ResourceNotFoundException(id);
 		}
 	}
 
-	// Inserção do usuário:
+	// Inserção do usuário (Não precisa)
 	public UserOrderSimple CreatObj(UserOrderSimple obj) {
-		return Uservice.save(obj);
+		return userOrderSimpleRepository.save(obj);
+
+		// Automaticamente o JSON retorna um 400 informando que o usuário digitou errado
 	}
 
-	// Deletar Usuário
+	// Deletar Usuário (Exceção tratada)
 	public void deleteByIdUser(Long idUser) {
-		Optional<UserOrderSimple> obj = Uservice.findById(idUser);
-		
-		if(obj != null) {
-			 Uservice.deleteById(idUser);
-		} 
-		else {
-			throw new RuntimeException("Id não encontrado");
+		try {
+		UserOrderSimple obj = userOrderSimpleRepository.findById(idUser).get();
+		userOrderSimpleRepository.deleteById(obj.getIdUser());
+		} catch (NoSuchElementException e) {
+			throw new ResourceNotFoundException(idUser);
 		}
 	}
 
-	// Update Usuário
+	// Update Usuário (Exceção tratada)
 	public UserOrderSimple UpdateNewUser(Long idUser, UserOrderSimple oldObjUser) {
-		UserOrderSimple newUser = Uservice.getReferenceById(idUser);
-		
-		UpdateData(newUser, oldObjUser);
-		return Uservice.save(newUser);
+		try {
+			UserOrderSimple newUser = userOrderSimpleRepository.getReferenceById(idUser);
+			UpdateData(newUser, oldObjUser);
+			return userOrderSimpleRepository.save(newUser);
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(idUser);
+		}
 	}
-
 	private void UpdateData(UserOrderSimple newUser, UserOrderSimple oldObjUser) {
 		newUser.setName(oldObjUser.getName());
 		newUser.setDateTime(oldObjUser.getDateTime());
