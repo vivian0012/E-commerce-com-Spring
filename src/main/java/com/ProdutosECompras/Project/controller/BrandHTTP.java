@@ -16,7 +16,7 @@ import com.ProdutosECompras.Project.profiel.Brand;
 import com.ProdutosECompras.Project.services.BrandService;
 
 @RestController
-@RequestMapping(value = "/api/brands")
+@RequestMapping(value = "/api/brand")
 public class BrandHTTP {
 
 	@Autowired
@@ -24,8 +24,14 @@ public class BrandHTTP {
 
 	// Retornando todas as marcas
 	@GetMapping
-	public ResponseEntity<List<Brand>> findAll(){ // ReponseEntity representa o chamado HTTPS
+	public ResponseEntity<List<Brand>> findAll(){
 		List<Brand> obj = brandService.findAll();
+		return ResponseEntity.ok().body(obj);
+	}
+
+	@GetMapping("/{idBrand}")
+	public ResponseEntity<Brand> FindById(@PathVariable Long idBrand) {
+		Brand obj = brandService.findById(idBrand);
 		return ResponseEntity.ok().body(obj);
 	}
 

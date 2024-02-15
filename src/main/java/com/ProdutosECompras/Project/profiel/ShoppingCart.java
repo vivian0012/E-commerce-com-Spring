@@ -6,19 +6,11 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tb_shopping_cart")
-@JsonPropertyOrder({"id", "userInfo", "products", "totalValue", "quantity"})
+@JsonPropertyOrder({"idCart", "userInfo", "products", "totalValue", "quantity"})
 public class ShoppingCart implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -29,11 +21,11 @@ public class ShoppingCart implements Serializable {
 	
 	@OneToOne
 	@JoinColumn(name = "id_user")
-	private UserOrderSimple UserInfo;
+	private UserOrderSimple userInfo;
 	
 	
 	@OneToMany(mappedBy = "shoppingcart")
-	private List<Products> products = new ArrayList<>();
+	private List<Products> productList = new ArrayList<>();
 	
 	public ShoppingCart() {
 
@@ -49,19 +41,19 @@ public class ShoppingCart implements Serializable {
 	}
 	
 	public UserOrderSimple getUserInfo() {
-		return UserInfo;
+		return userInfo;
 	}
 
 
-	public void setUserInfo(UserOrderSimple UserInfo) {
-		this.UserInfo = UserInfo;
+	public void setUserInfo(UserOrderSimple userInfo) {
+		this.userInfo = userInfo;
 	}
 
 
 	// Tentando pegar todos os produtos
 	public Integer getQuantity() {
 		Integer getQuantityTotal = 0;
-		for (Products x : products) {
+		for (Products x : productList) {
 			getQuantityTotal += x.getQuantity();
 		}
 		return getQuantityTotal;
@@ -70,19 +62,19 @@ public class ShoppingCart implements Serializable {
 	// Tentando pegar o VALOR TOTAL
 	public Double getTotalValue() {
 		Double sum = 0.0;
-		for(Products x: products) {
+		for(Products x: productList) {
 			Double count = x.getValue() * x.getQuantity();
 			sum += count;
 		}
 		return sum;
 	}
 
-	public List<Products> getProducts() {
-		return products;
+	public List<Products> getProductList() {
+		return productList;
 	}
 	
-	public void setProducts(List<Products> products) {
-		this.products = products;
+	public void setProductList(List<Products> productList) {
+		this.productList = productList;
 	}
 
 	public static long getSerialversionuid() {

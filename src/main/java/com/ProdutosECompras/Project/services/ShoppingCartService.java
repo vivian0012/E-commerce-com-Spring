@@ -66,10 +66,10 @@ public class ShoppingCartService {
 			Long idProduct = request.getIdProduct();
 			ShoppingCart Cart = shoppingCartRepository.findById(idCart).get();
 			Products products = productRepository.findById(idProduct).get();
-			List<Products> productList = Cart.getProducts();
+			List<Products> productList = Cart.getProductList();
 			products.setShoppingcart(Cart);
 			productList.add(products);
-			Cart.setProducts(productList);
+			Cart.setProductList(productList);
 			entityManager.flush();
 			return shoppingCartRepository.save(Cart);
 
@@ -86,7 +86,7 @@ public class ShoppingCartService {
 		if (cartOptional.isPresent()) {
 			ShoppingCart cart = cartOptional.get(); // Pegando o Id do carrinho
 			boolean isProductInCart = false;
-			for (Products product : cart.getProducts()) {
+			for (Products product : cart.getProductList()) {
 				if (product.getIdProduct().equals(idProduct)) {
 					isProductInCart = true;
 					break;
@@ -111,11 +111,11 @@ public class ShoppingCartService {
 		ShoppingCart Cart = shoppingCartRepository.findById(idCart).get(); // Instanciado
 		Products products = productRepository.findById(idProduct).get();
 
-		List<Products> productList = Cart.getProducts();
+		List<Products> productList = Cart.getProductList();
 
 		products.setShoppingcart(Cart);
 		productList.add(products);
-		Cart.setProducts(productList);
+		Cart.setProductList(productList);
 
 		return shoppingCartRepository.save(Cart);
 

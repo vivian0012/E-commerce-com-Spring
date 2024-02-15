@@ -1,8 +1,10 @@
 package com.ProdutosECompras.Project.services;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import com.ProdutosECompras.Project.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +27,12 @@ public class BrandService {
 	}
 	
 	// Retornando por ID
-	public Optional<Brand> findById(Long idBrand) {
-		Optional<Brand> obj = brandRepository.findById(idBrand);
-		if(obj.isPresent()) {
-			return obj;	
-		} else {
-			throw new RuntimeException("Id não encontrado");
+	public Brand findById(Long idBrand) {
+		try {
+			Brand obj = brandRepository.findById(idBrand).get();
+			return obj;
+		}catch (NoSuchElementException e) {
+			throw new ResourceNotFoundException(idBrand);
 		}
 	}
 	
@@ -47,7 +49,7 @@ public class BrandService {
 	}
 
 	private void updateData(Brand objNew, Brand objOld) {
-		objNew.setLabels(objOld.getLabels());
+		objNew.setLabel(objOld.getLabel());
 
 	}
 }

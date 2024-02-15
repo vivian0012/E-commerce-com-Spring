@@ -26,7 +26,7 @@ public class ProductsHTTP {
 	
 	// Retornando TODOS
 	@GetMapping
-	public ResponseEntity<List<Products>> findAll(){ // ReponseEntity representa o chamado HTTPS
+	public ResponseEntity<List<Products>> findAll(){
 		List<Products> obj = productService.findAll();
 		return ResponseEntity.ok().body(obj);
 	}
@@ -46,7 +46,7 @@ public class ProductsHTTP {
 	}
 	
 	// Alterando valores
-	@PutMapping(value = "/{idProduct}")
+	@PutMapping(value = "/update/{idProduct}")
 	public ResponseEntity<Products> UpdateObj(@PathVariable Long idProduct, @RequestBody Products objNew)
 	{
 		objNew = productService.UpdateObjProduct(idProduct, objNew);

@@ -61,7 +61,7 @@ public class ProductService {
 	}
 	private void UpdateData(Products objNew, Products objOld) {
 		objNew.setName(objOld.getName());
-		objNew.setDiscription(objOld.getDiscription());
+		objNew.setDescription(objOld.getDescription());
 		objNew.setQuantity(objOld.getQuantity());
 		objNew.setValue(objOld.getValue());
 		objNew.setLink(objOld.getLink());
@@ -75,11 +75,11 @@ public class ProductService {
 			Products products = productRepository.findById(idProduct).get();
 			Brand brand = brandRepository.findById(idBrand).get();
 			// Cria uma coleção valendo nula primeiro e depois coloca a coleção de produtos dentro dela.
-			brandSet = products.getBrandL();
+			brandSet = products.getBrandList();
 			// Aqui ele então adicionará as valores de brand obtidos pelo ID e colocará dentro da coleção de produtos.
 			brandSet.add(brand);
 			// Com a coleção de Brands atualizada, você passará para o produto. Dessa forma fará com que produtos tenha uma nova coleção.
-			products.setBrandL(brandSet);
+			products.setBrandList(brandSet);
 			return productRepository.save(products);
 		} catch (NoSuchElementException e) {
 			throw new ResourceNotFoundException(idProduct);

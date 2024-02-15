@@ -18,8 +18,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_produtos")
-@JsonPropertyOrder({"idProduct", "name", "discription", "quantity", "value", "link", "brandL"})
+@Table(name = "tb_product")
+@JsonPropertyOrder({"idProduct", "name", "description", "quantity", "value", "link", "brandList"})
 public class Products implements Serializable{
 	
 	/**
@@ -32,8 +32,8 @@ public class Products implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // O banco de dados organizará o id
 	private Long idProduct;
 	private String name;
-	private String discription;
-	private Integer Quantity;
+	private String description;
+	private Integer quantity;
 	private Double value;
 	private String link;
 	//================================================================
@@ -43,25 +43,23 @@ public class Products implements Serializable{
 	joinColumns = @JoinColumn(name = "product_id"), 
 	inverseJoinColumns = @JoinColumn(name = "brand_id"))
 	@JsonIgnore
-	private Set<Brand> brandL = new HashSet<>();
+	private Set<Brand> brandList = new HashSet<>();
 
 	//================================================================
 	@ManyToOne
 	@JsonIgnore
 	private ShoppingCart shoppingcart;
-	
-	
 
 	public Products() {
 	}
 	
 	// CONSTRUCTOR
-	public Products(Long idProduct, String name, String discription, Integer Quantity, Double value, String link) {
+	public Products(Long idProduct, String name, String description, Integer quantity, Double value, String link) {
 		super();
 		this.idProduct = idProduct;
 		this.name = name;
-		this.discription = discription;
-		this.Quantity = Quantity;
+		this.description = description;
+		this.quantity = quantity;
 		this.value = value;
 		this.link = link;
 
@@ -100,21 +98,21 @@ public class Products implements Serializable{
 		this.name = name;
 	}
 
-	public String getDiscription() {
-		return discription;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDiscription(String discription) {
-		this.discription = discription;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 
 	public Integer getQuantity() {
-		return Quantity;
+		return quantity;
 	}
 
 	public void setQuantity(Integer quantity) {
-		Quantity = quantity;
+		this.quantity = quantity;
 	}
 
 	public ShoppingCart getShoppingcart() {
@@ -129,12 +127,12 @@ public class Products implements Serializable{
 		return serialVersionUID;
 	}
 	
-	public Set<Brand> getBrandL() {
-		return brandL;
+	public Set<Brand> getBrandList() {
+		return brandList;
 	}
 
-	public void setBrandL(Set<Brand> brandL) {
-		this.brandL = brandL;
+	public void setBrandList(Set<Brand> brandList) {
+		this.brandList = brandList;
 	}
 	
 }

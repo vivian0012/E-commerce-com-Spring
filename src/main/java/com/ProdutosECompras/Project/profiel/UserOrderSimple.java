@@ -20,7 +20,6 @@ import jakarta.persistence.Table;
 @Table(name = "tb_user")
 @JsonPropertyOrder({ "idUser", "name", "dateTime", "quantity", "valueOrder", "idCart" })
 public class UserOrderSimple implements Serializable {
-
 	/**
 	 * 
 	 */
@@ -33,11 +32,9 @@ public class UserOrderSimple implements Serializable {
 	private String name;
 	private LocalDateTime dateTime;
 
-	@OneToOne(mappedBy = "UserInfo", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "userInfo", cascade = CascadeType.ALL)
 	@JsonIgnore
 	private ShoppingCart shoppingCart;
-
-	// private List<ShoppingCart> produtos = new ArrayList<>();
 
 	public UserOrderSimple() {
 

@@ -18,27 +18,22 @@ public class Brand implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idBrand;
-	private String labels;
+	private String label;
 	
-	@ManyToMany (mappedBy = "brandL")
+	@ManyToMany (mappedBy = "brandList")
 	Set<Products> ProdutosL = new HashSet<>();
-	
 
 	public Brand() {
 	}
 
-	public Brand(Long idBrand, String labels) {
+	public Brand(Long idBrand, String label) {
 		super();
 		this.idBrand = idBrand;
-		this.labels = labels;
-		
+		this.label = label;
 	}
-
 	public Long getIdBrand() {
 		return idBrand;
 	}
@@ -47,12 +42,12 @@ public class Brand implements Serializable{
 		this.idBrand = idBrand;
 	}
 
-	public String getLabels() {
-		return labels;
+	public String getLabel() {
+		return label;
 	}
 
-	public void setLabels(String labels) {
-		this.labels = labels;
+	public void setLabel(String label) {
+		this.label = label;
 	}
 	
 	public Set<Products> getProdutosL() {
